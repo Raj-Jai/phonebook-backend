@@ -1,7 +1,7 @@
 const express = require('express')
 
 const app = express()
-
+app.use(express.json())
 let persons = [
     { 
       "id": "1",
@@ -60,6 +60,44 @@ app.delete('/api/persons/:id',(req,res)=>{
     res.status(204).end()
 })
 
+
+const generateId = ()=>{
+    const newID = Math.floor(Math.random()*1e5)
+    return String(newID) 
+}
+
+app.post('/api/persons',(req,res)=>{
+    const body = req.body
+    const nameExist = (persons.map(p=> p.name.toLowerCase().trim())).includes(body.name.toLowerCase())
+    if(body.name==='')
+    {
+       return res.status(400).json({
+        error:"Name Missing"
+       })
+    }
+    else if(body.number==='')
+    {
+        return res.status(400).json({
+            error:"Number Missing"
+        })
+    }
+    else if (nameExist)
+    {
+        return res.status(400).json({
+            error:"Name must be unique"
+        })
+    }
+
+     const person = {
+        name:body.name,
+        number:body.number,
+        id:generateId()
+     }
+
+     persons = persons.concat(person)
+    console.log( person)
+    res.json(person)
+})
 
 
 const PORT = 3001
