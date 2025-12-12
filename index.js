@@ -1,7 +1,22 @@
 const express = require('express')
-
+const morgan = require('morgan')
 const app = express()
 app.use(express.json())
+
+morgan.token('body',(req,res)=>{
+    return JSON.stringify(req.body)
+})
+// const morganFun = (tokens,req,res)=>{
+//     return [
+//         tokens.method(req,res),
+//         tokens.url(req,res),
+//         tokens.status(req,res),
+//         tokens.res(req,res,'content-length'),'-','ms',
+//         tokens.body(req,res) ,
+    
+//     ].join(" ")
+// }
+app.use(morgan(':method :url :status :response-time ms- :body'))
 let persons = [
     { 
       "id": "1",
@@ -95,7 +110,7 @@ app.post('/api/persons',(req,res)=>{
      }
 
      persons = persons.concat(person)
-    console.log( person)
+    // console.log( person)
     res.json(person)
 })
 
