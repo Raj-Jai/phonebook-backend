@@ -2,7 +2,7 @@ const express = require('express')
 
 const app = express()
 
-const persons = [
+let persons = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
@@ -26,8 +26,38 @@ const persons = [
 ]
 
 app.get('/api/persons',(req,res)=>{
-    console.log("Sending response(get)")
+    console.log("Sending response(get) for persons")
     res.json(persons)
+})
+
+
+
+app.get('/info',(req,res)=>{
+    console.log("Sending response for info")
+    const infoResponse=`Phonebook has info of ${persons.length} people <br> ${new Date().toUTCString()}(Eastern European Standarad Time)`
+    res.send(infoResponse)
+})
+
+app.get('/api/persons/:id',(req,res)=>{
+    const id = req.params.id
+    const person = persons.find(p=>p.id===id)
+
+    if(person)
+    {
+        console.log(`Send response(get) for person id:${id}`)
+        res.json(person)
+    }
+    else
+    {
+        res.status(404).end()
+    }
+})
+
+app.delete('/api/persons/:id',(req,res)=>{
+    const id =req.params.id
+    persons = persons.filter(p=>p.id!==id)
+    console.log(`Sending response for Delete operation on person id${id}`)
+    res.status(204).end()
 })
 
 
