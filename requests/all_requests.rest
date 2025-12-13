@@ -8,10 +8,10 @@ GET https://phonebook-backend-rsr7.onrender.com/api/persons/
 DELETE https://phonebook-backend-rsr7.onrender.com/api/persons/3
 
 ###
-POST https://phonebook-backend-rsr7.onrender.com/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name":"J Raj",
+    "name":"J-Raj",
     "number":"9031977952"
 }
