@@ -1,4 +1,4 @@
-GET http://localhost:3001/api/persons/3
+GET http://localhost:3001/api/persons/
 
 ###
 GET https://phonebook-backend-rsr7.onrender.com/api/persons/
@@ -15,3 +15,5 @@ Content-Type: application/json
     "name":"J-Raj",
     "number":"9031977952"
 }
+###
+Get http://localhost:3001/info
