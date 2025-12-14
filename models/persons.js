@@ -11,8 +11,24 @@ mongoose.connect(url,{family:4}).then(result=>{
 })
 
 const personSchema = new mongoose.Schema({
-    name:String,
-    number:String,
+    name:{
+        type:String,
+        minLength:3,
+        required:true,
+    },
+    number:{
+        type:String,
+        validate:[(value)=>{
+            const dashCount = value.split("-").length-1
+            console.log(dashCount)
+            if(dashCount!==1) return false
+            const firstPartLength = value.indexOf("-")
+            if(firstPartLength===2 || firstPartLength===3) return true
+            return false
+        },"Incorrect Number format"],
+        minLength:8,
+        required:true,
+    }
 })
 personSchema.set('toJSON',{
     transform:(document,returedObject)=>{
