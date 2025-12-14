@@ -35,19 +35,19 @@ app.get('/api/persons', (req, res) => {
 
 
 
-app.get('/info', (req, res,next) => {
+app.get('/info', (req, res, next) => {
     console.log("Sending response for info")
-    Person.find({}).then(persons=>{
+    Person.find({}).then(persons => {
         const infoResponse = `Phonebook has info of ${persons.length} people <br> ${new Date().toUTCString()}(Eastern European Standarad Time)`
-    res.send(infoResponse)
-    }).catch(error=>next(error))
-    
+        res.send(infoResponse)
+    }).catch(error => next(error))
+
 })
 
-app.get('/api/persons/:id', (req, res,next) => {
-    Person.findById(req.params.id).then(result=>{
-        if(result){
-        res.json(result)
+app.get('/api/persons/:id', (req, res, next) => {
+    Person.findById(req.params.id).then(result => {
+        if (result) {
+            res.json(result)
         }
         else {
             console.log("Resource not found")
@@ -58,12 +58,12 @@ app.get('/api/persons/:id', (req, res,next) => {
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id
-    Person.findByIdAndDelete(id).then(result=>{
+    Person.findByIdAndDelete(id).then(result => {
         res.status(204).end()
         console.log(`Sending response for Delete operation on person id${id}`)
-    }).catch(error=>next(error))
-    
-    
+    }).catch(error => next(error))
+
+
 })
 
 
@@ -94,36 +94,34 @@ app.post('/api/persons', (req, res) => {
     const person = new Person({
         name: body.name,
         number: body.number,
-        
+
     })
 
-    person.save().then(result=>{
+    person.save().then(result => {
         res.json(result)
     })
 })
 
-app.put('/api/persons/:id',(req,res,next)=>{
-    const id =req.params.id
-    const {name,number} = req.body
-    Person.findById(id).then(person=>{
-        if(!person)
-        {
+app.put('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id
+    const { name, number } = req.body
+    Person.findById(id).then(person => {
+        if (!person) {
             res.status(404).end()
         }
-
+        person.name = name
         person.number = number
-        person.save().then(updatedNote=>{
+        return person.save().then(updatedNote => {
             res.json(updatedNote)
         })
-    }).catch(error=>next(error))
+    }).catch(error => next(error))
 
 })
 
-const errorHandler =(error,req,res,next) =>{
+const errorHandler = (error, req, res, next) => {
     console.error(error.message)
-    if(error.name ='CastError')
-    {
-        res.status(400).send({error:"Malformated id"})
+    if (error.name = 'CastError') {
+        res.status(400).send({ error: "Malformated id" })
     }
     next(error)
 }
